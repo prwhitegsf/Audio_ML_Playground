@@ -1,0 +1,25 @@
+<audio id="audio-player" controls src= "{{ url_for('static', filename=result) }}"></audio> 
+
+   img_load.addEventListener("load", ()=>{
+
+        audio_player.load()
+    })
+
+
+https://flask.palletsprojects.com/en/stable/quickstart/#sessions
+
+
+
+<p>
+                        {% for subfield in form.mfcc_count %}
+                            <table>
+                                <tr>{{subfield}}</tr>
+                                <tr>{{subfield.label}}</tr><br>
+                            </table>
+
+                            
+                        {% endfor %}
+                    </p>
+
+
+                    

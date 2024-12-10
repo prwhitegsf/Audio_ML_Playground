@@ -1,0 +1,60 @@
+
+Format(s): 
+Mono
+Stereo (Stereo Files)
+5.1 Surround (6 Channel Files)
+B-Format (4 Channel Files)
+
+Mono: 
+
+    sportscentre_omni.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 1
+Bits per Sample: 24
+Duration: 9.8 s
+File Size: 2.69 MB
+File Format: wav
+
+
+    sportscentre_cardioid.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 1
+Bits per Sample: 24
+Duration: 9.8 s
+File Size: 2.69 MB
+File Format: wav
+
+Stereo: 
+
+    sportscentre_ortf.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 2
+Bits per Sample: 24
+Duration: 9.8 s
+File Size: 5.38 MB
+File Format: wav
+
+B-Format: Multichannel: 
+
+    sportscentre_wxyz.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 4
+Bits per Sample: 24
+Duration: 9.8 s
+File Size: 10.77 MB
+File Format: wav
+
+5.1 Surround: 
+
+    sportscentre_williams.wav
+
+Sample Rate: 48 kHz
+Number of Channels: 6
+Bits per Sample: 24
+Duration: 9.8 s
+File Size: 8.08 MB
+File Format: wav 

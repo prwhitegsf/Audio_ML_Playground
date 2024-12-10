@@ -1,0 +1,21 @@
+
+Format(s): 
+Stereo (Stereo Files)
+
+Stereo: 
+
+    spokane_womans_club_ir.wav
+
+Sample Rate: 44.1 kHz
+Number of Channels: 2
+Bits per Sample: 24
+Duration: 6 s
+File Size: 1.51 MB
+File Format: wav
+Source Sound: JBL Eon G1
+Microphone: Rode NT4 X/Y Stereo Condenser
+Source Location: Stage
+Microphone Location: Rear of the hall
+Source Receiver Distance (m): 24 m
+Source Height: 2 m
+Receiver Height: 4 m

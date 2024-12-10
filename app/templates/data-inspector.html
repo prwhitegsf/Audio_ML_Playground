@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Hi!</h1>
+
+    <form method="POST" id="autoSubmitForm">
+        <p>
+            {{ form.csrf_token }}
+            {{ form.select }}
+            {{ form.sel_nums }}
+        </p>
+
+    </form>
+<img  id='result' src="{{url_for ('static', filename=image) }}" alt="img" >
+<script>
+       document.getElementById('{{ form.select.id }}').addEventListener('change', function(e) {
+
+           e.preventDefault();
+
+           const formData = new FormData(document.getElementById('autoSubmitForm'));
+
+           fetch(window.location.href, {
+               method: 'POST',
+               body: formData,
+               headers: {
+                   'X-Requested-With': 'XMLHttpRequest'
+               }
+           })
+           .then(response => response.json())
+           .then(data => {
+              const new_img = document.getElementById('result');
+              new_img.src= data.result
+
+           })
+           .catch(error => console.error('Error:', error));
+       });
+   </script>
+
+{% endblock %}

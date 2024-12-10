@@ -1,0 +1,122 @@
+
+.fe-content{
+
+    display: grid;
+    grid-template-rows: 10% 90%;
+}
+
+.text-box{
+
+    margin: 10px;
+    padding: 10px;
+    
+}
+
+.feature-explorer{
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+
+.fe-control{
+    display: grid;
+    grid-template-rows: 30% 15% auto;
+    margin: 10px;
+    padding: 10px;
+    gap: 10px;
+
+}
+
+.fe-display{
+    display: grid;
+    
+    grid-template-rows: auto auto auto auto;
+
+}
+
+
+.fe-form-filters{
+    margin: 5px;
+    padding: 0;
+    display: grid;
+    grid-template-rows: auto auto auto;
+}
+
+.fe-record-nav{
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    align-content: start;
+    justify-content: start;
+}
+
+.fe-form-tall{
+    display: grid;
+    grid-template-columns: 40% 30% 30%;
+
+    grid-template-areas: 
+        "emotion mels mfcc"
+        "emotion mels mfcc"
+        "emotion mels mfcc";
+}
+
+.fe-form-dropdowns{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: stretch;
+    margin-bottom: 20px;
+  
+ 
+}
+
+.form-dropdown{
+    display: grid;
+    grid-template-rows: auto auto;
+}
+
+
+#sex{
+    grid-column: 1 / 2;
+}
+
+#statement{
+    grid-column: 2 / 3;
+    justify-self: center;
+}
+
+#intensity{
+    grid-column: 3 / 4;
+}
+
+#emotion{
+    grid-area: emotion;
+}
+
+#mels{
+    grid-area: mels;
+}
+
+#mfcc{
+    grid-area: mfcc;
+}
+
+#record-info{
+    grid-row: 1 / 2;
+    margin: 5px;
+  
+}
+
+#wav-plot{
+    grid-row: 4 / 5;
+    margin: 5px;
+}
+
+#next-button{
+    grid-row: 2 / 3;
+    margin: 5px;
+}
+
+#audio-player{
+
+    grid-row: 3 / 4;
+    margin: 5px;
+}

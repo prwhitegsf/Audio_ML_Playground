@@ -1,0 +1,95 @@
+
+Format(s): 
+B-Format (4 Channel Files)
+
+B-Format: Multichannel: 
+
+    r1_rir_bformat.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 4
+Bits per Sample: 16
+Duration: 3 s
+File Size: 2.2 MB
+File Format: wav
+Source Sound: Log sine sweep 20 Hz - 20kHz, 30secs
+Microphone: Soundfield SPS422B Microphone
+Source Location: 3.6m from the back wall, 6.9m from the stage right wall and 7.2m from stage left wall.
+Microphone Location: opposite the source at sitting ear height, 1.9m from the wall, 6.9m from the stage right wall and 7.2m from stage left wall.
+Source Receiver Distance (m): 6.4 m
+Source Height: 1.5 m
+Receiver Height: 1.8 m
+Temperature: 19 °C
+
+
+    r2_rir_bformat.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 4
+Bits per Sample: 16
+Duration: 3 s
+File Size: 2.2 MB
+File Format: wav
+Source Sound: Log sine sweep 20 Hz - 20kHz, 30secs
+Microphone: Soundfield SPS422B Microphone
+Source Location: 3.6m from the back wall, 6.9m from the stage right wall and 7.2m from stage left wall.
+Microphone Location: Placed at ear height at sitting position on the second tier. 1.2m from the wall nearest wall and 6.2m from the rear stage wall
+Source Receiver Distance (m): 6.1 m
+Source Height: 1.5 m
+Receiver Height: 1.7 m
+Temperature: 19 °C
+
+
+    r3_rir_bformat.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 4
+Bits per Sample: 16
+Duration: 3 s
+File Size: 2.2 MB
+File Format: wav
+Source Sound: Log sine sweep 20 Hz - 20kHz, 30secs
+Microphone: Soundfield SPS422B Microphone
+Source Location: 3.6m from the back wall, 6.9m from the stage right wall and 7.2m from stage left wall.
+Microphone Location: Centre of second tier of the seats to the stage right. 1.2m from the nearest wall and 5.3 from rear stage wall
+Source Receiver Distance (m): 5.5 m
+Source Height: 1.5 m
+Receiver Height: 1.7 m
+Temperature: 19 °C
+
+
+    r4_rir_bformat.wav
+
+Sample Rate: 96 kHz
+Number of Channels: 4
+Bits per Sample: 16
+Duration: 3 s
+File Size: 2.2 MB
+File Format: wav
+Source Sound: Log sine sweep 20 Hz - 20kHz, 30secs
+Microphone: Soundfield SPS422B Microphone
+Source Location: 3.6m from the back wall, 6.9m from the stage right wall and 7.2m from stage left wall.
+Microphone Location: 1.3m from back wall, 6.9m from the stage right wall and 7.2m from stage left wall.
+Source Receiver Distance (m): 2.3 m
+Source Height: 1.5 m
+Receiver Height: 1.5 m
+Temperature: 19 °C
+
+
+    r5_rir_format.wav 
+
+Sample Rate: 96 kHz
+Number of Channels: 4
+Bits per Sample: 16
+Duration: 3 s
+File Size: 2.2 MB
+File Format: wav
+Source Sound: Log sine sweep 20 Hz - 20kHz, 30secs
+Microphone: Soundfield SPS422B Microphone
+Source Location: 3.6m from the back wall, 6.9m from the stage right wall and 7.2m from stage left wall.
+Microphone Location: 1.1m from stage left wall and 1.2m from the curtain.
+Source Receiver Distance (m): 9.2 m
+Source Height: 1.5 m
+Receiver Height: 1.6 m
+Temperature: 19 °C
+
