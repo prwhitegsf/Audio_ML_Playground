@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from app import db
 from flask import session as sess
 from flask import Response, send_file, make_response
+from markupsafe import escape
 
 import base64
 from io import BytesIO
@@ -23,7 +24,8 @@ md = model.ravdess_metadata
 session = Session(engine)
 
 # Audio Features class instantiation
-af = AudioFeatures('app/static/datasets/RAVDESS/audio/Actor_01/03-01-01-01-02-02-01.wav')
+ctl = sel.FormControl()
+af = AudioFeatures(ctl.get_first_file(md,session))
 
 
 
@@ -33,24 +35,17 @@ def index():
     
     form = forms.DataSetFilterForm()
     next_button = forms.NextRecord()
-    ctl = sel.FormControl()
-   
-    sess['fp'] = 'app/static/datasets/RAVDESS/audio/Actor_01/03-01-01-01-02-02-01.wav'
-    fp = 'app/static/datasets/RAVDESS/audio/Actor_01/03-01-01-01-02-02-01.wav'
+
+    
     
     record_info=''
-    record_num = 0
+ 
 
     if request.method == 'POST':
         if form.submit.data:
             
-            sess['filter_dict'] = {'sex'        : form.sex.data, 
-                                   'statement'  : form.statement.data,
-                                   'emotion'    : form.emotion.data,
-                                   'intensity'  : form.intensity.data,
-                                   'num_mels'   : form.mel_filter_count.data,
-                                   'num_mfcc'   : form.mfcc_count.data}
-           
+            ctl.set_filter_dict(form,sess)
+            
             sess['file_list']= ctl.get_file_list(form, md, session)
             
             sess['record_count'] = len(sess['file_list'])
@@ -67,15 +62,8 @@ def index():
             else:
                 sess['record_num'] = 1
             
-
-            if 'filter_dict' in sess:
-                form.sex.data       = sess['filter_dict']['sex']
-                form.statement.data = sess['filter_dict']['statement']
-                form.emotion.data   = sess['filter_dict']['emotion']
-                form.intensity.data = sess['filter_dict']['intensity']
-                
-                form.mel_filter_count.data = sess['filter_dict']['num_mels']
-                form.mfcc_count.data = sess['filter_dict']['num_mfcc']
+            ctl.set_form_data(form, sess)
+            
             
 
             if 'file_list' in sess:
@@ -89,13 +77,14 @@ def index():
     
         af.change_file(sess['fp'])
         record_info = f'Displaying record {sess['record_num']+1} of {sess['record_count']}'
-            
+       
+
+
     return render_template('feature-explorer.html',
         title='Home', 
         form=form, 
         next_button=next_button, 
-        record_text=record_info, 
-        result=sess['fp'][11:])
+        record_text=record_info)
 
 
 @bp.route('/audio-player', methods=['GET', 'POST'])

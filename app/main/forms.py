@@ -3,12 +3,6 @@ from wtforms import StringField, SubmitField, TextAreaField, RadioField, SelectF
 from wtforms.validators import ValidationError, DataRequired, Length
 
 
-
-
-
-
-
-
 def create_range():
         rng = list(range(1,25))
         nums = ['all']
@@ -52,12 +46,11 @@ class DataSetFilterForm(FlaskForm):
     mel_filter_count = RadioField("Mel Filter Count", choices=[('512','512'),
                                                                ('256','256'),
                                                                ('128','128'),
-                                                               ('64','64'),
-                                                               ('32','32')],
+                                                               ('64','64')],
                                                                default='128')
     
-    mfcc_count = RadioField("MFCC Count", choices=[('160','160'),
-                                                   ('80','80'),
+    mfcc_count = RadioField("MFCC Count", choices=[
+                                                   ('60','60'),
                                                    ('40','40'),
                                                    ('20','20'),
                                                    ('10','10')],

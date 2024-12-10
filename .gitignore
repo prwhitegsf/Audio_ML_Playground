@@ -87,3 +87,6 @@ secrets.py
 
 /IRs
 ./IRs
+
+# paste board
+sketchpad.txt

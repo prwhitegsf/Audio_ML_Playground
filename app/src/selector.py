@@ -53,3 +53,27 @@ class FormControl():
 
         return files
 
+
+    def get_first_file(self,md,session):
+        stmt = sa.select(md.filepath)
+        return session.scalars(stmt).first()
+       
+    def set_filter_dict(self, form, sess):
+
+        sess['filter_dict'] = {'sex'         : form.sex.data, 
+                                'statement'  : form.statement.data,
+                                'emotion'    : form.emotion.data,
+                                'intensity'  : form.intensity.data,
+                                'num_mels'   : form.mel_filter_count.data,
+                                'num_mfcc'   : form.mfcc_count.data}        
+
+    def set_form_data(self,form, sess):
+
+        if 'filter_dict' in sess:
+                form.sex.data       = sess['filter_dict']['sex']
+                form.statement.data = sess['filter_dict']['statement']
+                form.emotion.data   = sess['filter_dict']['emotion']
+                form.intensity.data = sess['filter_dict']['intensity']
+                
+                form.mel_filter_count.data  = sess['filter_dict']['num_mels']
+                form.mfcc_count.data        = sess['filter_dict']['num_mfcc']
