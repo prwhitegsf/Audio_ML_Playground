@@ -7,6 +7,7 @@ import os
 import app.src.models as model
 import app.src.selector as sel
 from app.src.FeatureExtractors import AudioFeatures 
+from app.src.AggregatePlots import PlotAggregator
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
 from app import db
@@ -102,11 +103,12 @@ def get_audio_blob():
 @bp.route('/plot-wav',  methods=['GET', 'POST'])
 def plot_wav():
     
-    fig = af.get_waveform_plot()
-
+    #fig = af.get_waveform_plot()
+    ap = PlotAggregator(af)
+    fig = ap.get_record_viz()
     return send_file(fig, mimetype='image/png')
 
-
+'''
 @bp.route('/plot-spectro',  methods=['GET', 'POST'])
 def plot_spectro():
     
@@ -141,3 +143,4 @@ def plot_mfcc():
 
     return send_file(fig, mimetype='image/png')
 
+'''

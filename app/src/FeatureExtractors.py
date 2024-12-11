@@ -88,14 +88,15 @@ class AudioFeatures():
         buf.seek(0)
         return buf
 
-    def get_waveform_plot(self,title='waveform'):
+    def get_waveform_plot(self,title='waveform', ax=None):
         waveform = self.wav.numpy()
 
         num_channels, num_frames = waveform.shape
         time_axis = torch.arange(0, num_frames) / self.sr
 
         fig = Figure(figsize=(3,2.25))
-        ax = fig.subplots(num_channels, 1)
+        if ax is None:
+            ax = fig.subplots(num_channels, 1)
         
         ax.plot(time_axis, waveform[0], linewidth=1)
         ax.grid(True)
@@ -104,7 +105,7 @@ class AudioFeatures():
         fig.tight_layout()
        
 
-        return self.fig_to_buf(fig)
+        #return self.fig_to_buf(fig)
 
 
     def get_spectrogram_plot(self):

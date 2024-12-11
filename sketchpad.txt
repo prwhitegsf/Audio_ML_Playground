@@ -39,3 +39,14 @@ if 'filter_dict' in sess:
                 
                 form.mel_filter_count.data = sess['filter_dict']['num_mels']
                 form.mfcc_count.data = sess['filter_dict']['num_mfcc']
+
+
+  - torchaudio=2.5.1=py312_cpu
+  - torchvision=0.20.1=py312_cpu
+  - pytorch=2.5.1=py3.12_cpu_0
+  - pytorch-mutex=1.0=cpu
+
+
+   <img id="plot" src="{{ url_for('main.plot_spectro') }}" alt="Matplotlib Plot">
+            <img id="plot" src="{{ url_for('main.plot_mels') }}" alt="Matplotlib Plot">
+            <img id="plot" src="{{ url_for('main.plot_mfcc') }}" alt="Matplotlib Plot">

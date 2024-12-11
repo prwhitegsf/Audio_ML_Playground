@@ -25,13 +25,15 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
+    
+
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
     #print(app.url_map)
 
     db.init_app(app)
 
-
+    
 
     if not app.debug and not app.testing:
 
