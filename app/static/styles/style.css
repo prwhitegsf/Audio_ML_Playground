@@ -2,7 +2,7 @@
 .fe-content{
 
     display: grid;
-    grid-template-rows: 10% 90%;
+    grid-template-rows: 0.2in 10in;
 }
 
 .text-box{
@@ -14,13 +14,13 @@
 
 .feature-explorer{
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 4in 4in;
 }
 
 
 .fe-control{
     display: grid;
-    grid-template-rows: 30% 15% auto;
+    grid-template-rows: 3in 1.5in 5in;
     margin: 10px;
     padding: 10px;
     gap: 10px;
@@ -44,7 +44,7 @@
 
 .fe-record-nav{
     display: grid;
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto;
     align-content: start;
     justify-content: start;
 }
