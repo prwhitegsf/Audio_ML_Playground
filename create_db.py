@@ -5,32 +5,13 @@ from sqlalchemy import insert
 import os, glob
 import pandas as pd
 import soundfile
-
-engine = create_engine("sqlite+pysqlite:///app.db")
-
-metadata_obj = MetaData()
-
-ravdess_metadata = Table(
-    "ravdess_metadata",
-    metadata_obj,
-    Column("id",Integer,primary_key=True),
-    Column("filepath",String(100),nullable=False),
-    Column("actor",Integer,nullable=False),
-    Column("sex",String(10),nullable=False),
-    Column("statement",Integer,nullable=False),
-    Column("emotion",String(20),nullable=False),
-    Column("intensity",Integer,nullable=False),
-    Column("label",Integer,nullable=False),
-    Column("sample_rate",Integer,nullable=False),
-    Column("filesize",Integer,nullable=False),
-)
-
-metadata_obj.create_all(engine)
+import sys
 
 
-class CreateRAVDESSMetadata:
 
-    def __init__(self, folder='app/static/datasets/RAVDESS/audio/'):
+class CreateRAVDESSMetadata():
+
+    def __init__(self, db_name='db_name', folder='app/static/datasets/RAVDESS/audio/'):
         
         self.emotions = {
             '01':'neutral',
@@ -43,7 +24,35 @@ class CreateRAVDESSMetadata:
             '08':'surprised'
         }
 
-        self.dataset_folder = folder#'../datasets/RAVDESS/audio/'
+        self.dataset_folder = folder
+
+        self.engine = self.get_engine(db_name)
+
+        self.metadata_obj = MetaData()
+
+        self.rav_table = Table(
+            "ravdess_metadata",
+            self.metadata_obj,
+            Column("id",Integer,primary_key=True),
+            Column("filepath",String(100),nullable=False),
+            Column("actor",Integer,nullable=False),
+            Column("sex",String(10),nullable=False),
+            Column("statement",Integer,nullable=False),
+            Column("emotion",String(20),nullable=False),
+            Column("intensity",Integer,nullable=False),
+            Column("label",Integer,nullable=False),
+            Column("sample_rate",Integer,nullable=False),
+            Column("filesize",Integer,nullable=False),
+        )
+
+        self.metadata_obj.create_all(self.engine)
+
+
+
+
+
+    def get_engine(self,db_name):
+        return create_engine(f'sqlite+pysqlite:///{db_name}')
 
 
     def get_angry_label(self, filename):  
@@ -66,7 +75,7 @@ class CreateRAVDESSMetadata:
             return sample_rate
         
 
-    def get_metadata(self, table, engine):
+    def get_metadata(self):
         count = 0
         
         for file in glob.glob(f'{self.dataset_folder}Actor_*/*.wav'):
@@ -84,9 +93,9 @@ class CreateRAVDESSMetadata:
             sample_rate = self.get_sample_rate(file)
             filesize = os.path.getsize(file)
 
-            with engine.connect() as connection:
+            with self.engine.connect() as connection:
 
-                stmt = insert(table).values(
+                stmt = insert(self.rav_table).values(
                         id=id,
                         filepath=file,
                         actor=actor,
@@ -106,6 +115,11 @@ class CreateRAVDESSMetadata:
 
             count += 1
 
-md = CreateRAVDESSMetadata()
+dbname = 'dbtest.db'
 
-md.get_metadata(ravdess_metadata, engine)
+if len(sys.argv) > 1:
+    dbname=sys.argv[1]
+
+md = CreateRAVDESSMetadata(db_name=dbname)
+
+md.get_metadata()

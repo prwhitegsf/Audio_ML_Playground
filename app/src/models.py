@@ -12,6 +12,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 db = SQLAlchemy(model_class=Base)
 
 class ravdess_metadata(db.Model):
+    
     __tablename__ = "ravdess_metadata"
     id: Mapped[int] = mapped_column(primary_key=True)
     filepath: Mapped[str] 

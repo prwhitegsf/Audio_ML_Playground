@@ -11,7 +11,7 @@ from app.src.AggregatePlots import PlotAggregator
 from app.src.SessionManager import SessionManager
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
-from app import db
+#from app import db
 from flask import session as sess
 from flask import Response, send_file, make_response
 from markupsafe import escape
@@ -22,14 +22,14 @@ from io import BytesIO
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
-engine = sa.create_engine("sqlite+pysqlite:///app.db")
+m_engine = sa.create_engine("sqlite+pysqlite:///app.db")
 md = model.ravdess_metadata
-dbsession = Session(engine)
+dbsession = Session(m_engine)
 
 # Audio Features class instantiation
 ctl = sel.DBControl()
 af = AudioFeatures(ctl.get_first_file(md,dbsession))
-
+#af=[]
 
 
 

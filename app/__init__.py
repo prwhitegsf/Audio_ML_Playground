@@ -4,17 +4,11 @@ from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 import os
-from flask import Flask, request, current_app
+from flask import Flask, request, current_app, g
 from config import Config
+import sqlite3
 
 import app.src.models as model
-
-
-def get_locale():
-    return request.accept_languages.best_match(current_app.config['LANGUAGES'])
-
-class Base(DeclarativeBase):
-  pass
 
 
 db = model.db
