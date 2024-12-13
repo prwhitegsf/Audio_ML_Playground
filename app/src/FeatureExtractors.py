@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 
 class AudioFeatures():
 
-    def __init__(self, file):
+    def __init__(self, file="app/static/datasets/RAVDESS/audio/Actor_01/03-01-01-01-01-01-01.wav"):
         
         self.wav, self.sr = torchaudio.load(file)
         self.fig = Figure()

@@ -1,17 +1,18 @@
 import pytest
 
-from app import create_app
+from app import create_app, db as _db
 import app.src.models as model
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
+from config import TestConfig
+import os
+
 
 @pytest.fixture(scope='session')
 def app():
-    app = create_app()
-    app.config.update({
-        "TESTING":True,
-        'SQLALCHEMY_DATABASE_URI':"sqlite+pysqlite:///tester.db"
-    })
+  
+    app = create_app(config_class=TestConfig)
+  
 
     yield app
 
@@ -22,25 +23,41 @@ def app_ctx(app):
         yield
 
 
+
 @pytest.fixture(scope='session')
 def db(app, app_ctx):
-    engine = sa.create_engine("sqlite+pysqlite:///tester.db")
-    model.db.app = app
-    model.db.create_all()
+	_db.app = app
+	_db.create_all()
 
-    yield model.db
+	yield _db
 
-    model.db.drop_all()
+	_db.drop_all()
+
 
 @pytest.fixture(scope='function')
 def session(app, db, app_ctx):
-    engine = sa.create_engine("sqlite+pysqlite:///tester.db")
-    #connection = db.engine.connect()
-    #transaction = connection.begin()
 
+    connection = db.engine.connect()
+    transaction = connection.begin()
+
+    session = db._make_scoped_session(options={'bind': connection})
+    db.session = session
+
+    yield session
+
+    transaction.rollback()
+    connection.close()
+    session.remove()
+    
+    '''
+    model.db.app = app
+    model.db.create_all()
+
+    engine = sa.create_engine("sqlite+pysqlite:///tester.db")
     session = Session(engine)
 
     yield session
 
     session.close()
-     
+    model.db.drop_all()
+    '''

@@ -19,6 +19,8 @@ class SessionManager():
 
     def initialize_session(self, get_files):
         if self.is_new_session():
+        
+            
             self.sess['filters'] = {'sex'         : 'all', 
                                     'statement'  : 'all',
                                     'emotion'    : 'all',
@@ -26,6 +28,7 @@ class SessionManager():
                                     'num_mels'   : '128',
                                     'num_mfcc'   : '40'
                                     } 
+            
             self.sess['file_list'] = get_files
             self.sess['record_count'] = len(self.sess['file_list'])
             self.sess['record_num']=0

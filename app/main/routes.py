@@ -28,7 +28,8 @@ dbsession = Session(m_engine)
 
 # Audio Features class instantiation
 ctl = sel.DBControl()
-af = AudioFeatures(ctl.get_first_file(md,dbsession))
+af = AudioFeatures()
+
 #af=[]
 
 

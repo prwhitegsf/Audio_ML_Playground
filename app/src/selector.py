@@ -57,7 +57,8 @@ class DBControl():
     def get_file_list(self, sess, md,session):
 
         files=[]        
-        stmt = sa.select(md).where(sa.text(self.create_where_clause(sess)))
+        #stmt = sa.select(md).where(sa.text(self.create_where_clause(sess)))
+        stmt = sa.select(md)
         
         for row in session.scalars(stmt):
             files.append(row.filepath)

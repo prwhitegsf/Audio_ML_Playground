@@ -1,5 +1,7 @@
 import app.src.models as model
 import sqlalchemy as sa
+from  config import Config
+import os
 
 '''
 def test_write_to_database(session):
@@ -25,7 +27,6 @@ def test_write_to_database(session):
 
     assert len(result) == 1
 '''
-
 
 
 def test_get_record_from_db(session):

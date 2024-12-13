@@ -23,7 +23,7 @@ def create_app(config_class=Config):
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
-    #print(app.url_map)
+    print(app.config['SQLALCHEMY_DATABASE_URI'])
 
     db.init_app(app)
 
