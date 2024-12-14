@@ -1,6 +1,4 @@
 
-
-from app.src.FeatureExtractors import AudioFeatures as af
 from matplotlib.figure import Figure
 
 class PlotAggregator():

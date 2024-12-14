@@ -1,12 +1,9 @@
 import logging
-from logging.handlers import SMTPHandler, RotatingFileHandler
-from sqlalchemy import MetaData
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from logging.handlers import RotatingFileHandler
+
 import os
-from flask import Flask, request, current_app, g
+from flask import Flask
 from config import Config
-import sqlite3
 
 import app.src.models as model
 
@@ -19,15 +16,12 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    
-
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
-    print(app.config['SQLALCHEMY_DATABASE_URI'])
+
 
     db.init_app(app)
 
-    
 
     if not app.debug and not app.testing:
 
@@ -48,4 +42,3 @@ def create_app(config_class=Config):
     return app
 
 
-#from app import models

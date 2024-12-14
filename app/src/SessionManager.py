@@ -5,10 +5,7 @@ class SessionManager():
 
     def __init__(self, sess):
         self.sess = sess
-        # session defaults
-          
-        
-        #self.sess['record_num'] = 0
+
 
     def is_new_session(self):
          

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, RadioField, SelectField, SelectMultipleField
-from wtforms.validators import ValidationError, DataRequired, Length
+from wtforms import SubmitField, RadioField, SelectField, SelectMultipleField
+
 
 
 def create_range():
