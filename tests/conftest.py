@@ -12,8 +12,16 @@ import os
 def app():
   
     app = create_app(config_class=TestConfig)
+    yield app
+    
+
+
+@pytest.fixture(scope='session')
+def app_ctx(app):
     with app.app_context():
         yield
 
 
-
+@pytest.fixture()
+def client(app):
+    return app.test_client()

@@ -49,7 +49,7 @@ class DBControl():
         return files
 
 
-    def get_filtered_file_list(self, sess,db):
+    def get_filtered_file_list(self,sess,db):
 
         stmt = db.session.execute(db.select(md).where(text(self.create_where_clause(sess)))).scalars()  
         files = [row.filepath for row in stmt]

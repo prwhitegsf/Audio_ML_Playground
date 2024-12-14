@@ -26,6 +26,7 @@ class PostForm(FlaskForm):
 
 class DataSetFilterForm(FlaskForm):
     
+
     submit = SubmitField('Submit')
     actor = SelectMultipleField('Actor Number', choices=create_range())
     sex  = SelectField('Sex',choices=['all','female','male'],default='all')
@@ -55,6 +56,7 @@ class DataSetFilterForm(FlaskForm):
                                                    ('20','20'),
                                                    ('10','10')],
                                                    default='40')
+    
 
 
 class NextRecord(FlaskForm):

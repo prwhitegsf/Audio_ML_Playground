@@ -8,6 +8,7 @@ from config import Config
 import app.src.models as model
 
 
+
 db = model.db
 
 
@@ -21,6 +22,7 @@ def create_app(config_class=Config):
 
 
     db.init_app(app)
+    
 
 
     if not app.debug and not app.testing:

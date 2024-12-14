@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h1>Hi!</h1>
+    <h1>Data Inspector</h1>
 
     <form method="POST" id="autoSubmitForm">
         <p>
@@ -18,7 +18,7 @@
            e.preventDefault();
 
            const formData = new FormData(document.getElementById('autoSubmitForm'));
-
+           console.log(formData) 
            fetch(window.location.href, {
                method: 'POST',
                body: formData,

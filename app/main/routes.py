@@ -2,7 +2,7 @@
 
 from flask import render_template, request
 from flask import session as sess
-from flask import send_file, make_response
+from flask import send_file, make_response, jsonify
 
 from app.main import bp
 import app.main.forms as forms
@@ -19,8 +19,29 @@ ctl = sel.DBControl()
 af = AudioFeatures()
 
 
+
+@bp.route('/data-inspector', methods=['GET', 'POST'])
+def data_inspector():
+
+    form = forms.PostForm()
+    fp = '/datasets/RAVDESS/metadata/img/emotions.jpg'
+    if request.method == 'POST':
+        if form.select.data:
+         
+            if form.validate_on_submit():
+                
+                fp = '/static/datasets/RAVDESS/metadata/img/' + form.select.data
+                return jsonify({'result': f'{fp}'})
+    
+    return render_template('data-inspector.html',title='Home', image=fp, form=form, result=fp)
+
+
+
+
 @bp.route('/', methods=['GET', 'POST'])
-def index():
+@bp.route('/index', methods=['GET', 'POST'])
+@bp.route('/feature-extractor', methods=['GET', 'POST'])
+def feature_extractor():
     
     form = forms.DataSetFilterForm()
     next_button = forms.NextRecord()
@@ -37,7 +58,7 @@ def index():
             form.submit.data = False
             
         if next_button.next.data:
-
+            
             s.get_next_record()
             s.set_form_data(form)
            
@@ -46,11 +67,13 @@ def index():
       
 
 
-    return render_template('feature-explorer.html',
+    return render_template('feature-extractor.html',
         title='Home', 
         form=form, 
         next_button=next_button, 
         record_text=sess['record_message'])
+
+
 
 
 @bp.route('/audio-player', methods=['GET', 'POST'])
@@ -65,8 +88,8 @@ def get_audio_blob():
     return response
 
 
-@bp.route('/plot-wav',  methods=['GET', 'POST'])
-def plot_wav():
+@bp.route('/view-audio-features',  methods=['GET', 'POST'])
+def view_audio_features():
     
     ap = PlotAggregator(af)
     # Creating a new session obj b/c initialize session

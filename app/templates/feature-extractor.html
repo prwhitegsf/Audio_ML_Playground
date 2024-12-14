@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Feature Explorer</h1>
+<h1>Audio Feature Extraction</h1>
 
 
     <div class="fe-content">
@@ -85,8 +85,8 @@
             </div>
         </div>
         
-        <div class="fe-display">
-            <img id="plot" src="{{ url_for('main.plot_wav') }}" alt="Matplotlib Plot">
+        <div class="view-audio-features">
+            <img id="plot" src="{{ url_for('main.view_audio_features') }}" alt="Matplotlib Plot">
            
         </div>   
     </div>
