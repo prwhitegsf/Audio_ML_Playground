@@ -1,37 +1,12 @@
-import app.src.models as model
-import sqlalchemy as sa
-from  config import Config
-import os
+from app.src.models import ravdess_metadata as md
+from app import db
 
-'''
-def test_write_to_database(session):
-    new_record = model.ravdess_metadata(
-            filepath="somepath",
-            actor=1,
-            sex='female',
-            statement='1',
-            emotion='angry',
-            intensity=1,
-            label=1,
-            sample_rate=48000,
-            filesize=100
-    )
+
+
+def test_get_all_records_from_db(app):
+    stmt = db.session.execute(db.select(md)).all()
+    assert len(stmt) == 360
+
+
     
-    session.add(new_record)
-    session.commit()
-
-    out = sa.select(model.ravdess_metadata).where(model.ravdess_metadata.actor == 1)
-    result = session.execute(out).all()
-    
-
-
-    assert len(result) == 1
-'''
-
-
-def test_get_record_from_db(session):
-    stmt = sa.select(model.ravdess_metadata)
-    result = session.execute(stmt).all()
-
-    assert len(result) == 360
 
