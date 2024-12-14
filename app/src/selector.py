@@ -43,32 +43,21 @@ class DBControl():
 
 
 
-    def get_full_file_list(self, md, session):
-        
-        files=[]        
-        stmt = sa.select(md)
-        
-        for row in session.scalars(stmt):
-            files.append(row.filepath)
+    def get_full_file_list(self, md, db):
+            
+        stmt = db.session.execute(db.select(md)).scalars()
+        files = [row.filepath for row in stmt]
 
         return files
 
 
-    def get_file_list(self, sess, md,session):
+    def get_file_list(self, sess, md,db):
 
-        files=[]        
-        #stmt = sa.select(md).where(sa.text(self.create_where_clause(sess)))
-        stmt = sa.select(md)
-        
-        for row in session.scalars(stmt):
-            files.append(row.filepath)
-
+        stmt = db.session.execute(db.select(md).where(sa.text(self.create_where_clause(sess)))).scalars()  
+        files = [row.filepath for row in stmt]
         return files
 
 
-    def get_first_file(self,md,session):
-        stmt = sa.select(md.filepath)
-        return session.scalars(stmt).first()
 
 
 
