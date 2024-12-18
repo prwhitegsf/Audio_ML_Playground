@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Select Label and View MFCCs</h1>
+
+
+    <div class="fe-content">
+    <div class="text-box">
+        Example text.
+    </div>
+
+    <div class="feature-explorer">
+        <div class="fe-control">
+            <div class="fe-form-filters">
+                <form method="POST" id="filter-data-form">
+                    {{ form.csrf_token }}
+                    <div class="fe-form-dropdowns">
+                       
+                        <div class="form-dropdown" id="sex">
+                            sex<br>
+                            {{ form.sex }}
+                        </div>    
+
+                        <div  id="statement">
+                            statement<br>
+                            {{ form.statement }}
+                        </div> 
+
+
+                        <div  id="intensity">
+                            intensity<br>
+                            {{ form.intensity }}
+                        </div> 
+                       
+                    
+                    </div>
+                    <div class="fe-form-tall">
+                        <p id="emotion">
+                            emotion<br>
+                            {{ form.emotion }}
+                        </p>
+                        <p id="mels">
+                            mel count<br>
+                            {% for subfield in form.mel_filter_count %}
+                                        
+                                {{subfield}}
+                                {{subfield.label}}<br>
+                                        
+                            {% endfor %}
+                        </p>
+
+                        <p id="mfcc">
+                            mfcc count<br>
+                            {% for subfield in form.mfcc_count %}
+                                        
+                                {{subfield}}
+                                {{subfield.label}}<br>
+                                        
+                            {% endfor %}
+                        </p>
+
+                    </div>    
+                       
+                    <p>{{ form.submit }}</p>
+
+                </form>
+            </div>
+            
+            <div class="fe-record-nav">
+                
+               
+                
+                <form method="POST" id="next-button" >
+                   
+                     
+                    {{ next_button.next }} {{ record_text}}  
+                    
+                </form>
+
+                <audio id="audio-player" controls src= "{{ url_for('main.get_audio_blob') }}"></audio> 
+                
+            </div>
+            <div class="text-box">
+                Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. 
+            </div>
+        </div>
+        
+        <div class="view-mfcc-group">
+            <img id="plot" src="{{ url_for('main.view_mfcc_group') }}" alt="Matplotlib Plot">
+           
+        </div>   
+    </div>
+   
+</div>
+
+{% endblock %}

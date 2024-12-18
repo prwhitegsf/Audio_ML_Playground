@@ -21,7 +21,6 @@ class ravdess_metadata(db.Model):
     statement: Mapped[str]
     emotion: Mapped[str]
     intensity: Mapped[int]
-    label: Mapped[int]
     sample_rate: Mapped[int]
     filesize: Mapped[int]
 

@@ -81,6 +81,9 @@ secrets.py
 # audio
 *.wav
 
+# feature extractions
+*.npy
+
 # datasets
 /datasets
 ./datasets
@@ -90,3 +93,4 @@ secrets.py
 
 # paste board
 sketchpad.txt
+

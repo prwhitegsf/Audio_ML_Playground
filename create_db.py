@@ -40,15 +40,11 @@ class CreateRAVDESSMetadata():
             Column("statement",Integer,nullable=False),
             Column("emotion",String(20),nullable=False),
             Column("intensity",Integer,nullable=False),
-            Column("label",Integer,nullable=False),
             Column("sample_rate",Integer,nullable=False),
             Column("filesize",Integer,nullable=False),
         )
 
         self.metadata_obj.create_all(self.engine)
-
-
-
 
 
     def get_engine(self,db_name):
@@ -89,7 +85,7 @@ class CreateRAVDESSMetadata():
             statement = filename.split("-")[4]
             emotion = self.emotions[filename.split("-")[2]]
             intensity = filename.split("-")[3]
-            label = self.get_angry_label(filename)
+            #label = self.get_angry_label(filename)
             sample_rate = self.get_sample_rate(file)
             filesize = os.path.getsize(file)
 
@@ -103,7 +99,7 @@ class CreateRAVDESSMetadata():
                         statement=statement,
                         emotion=emotion,
                         intensity=intensity,
-                        label=label,
+                       # label=label,
                         sample_rate=sample_rate,
                         filesize=filesize
                     )

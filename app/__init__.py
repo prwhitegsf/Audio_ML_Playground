@@ -2,7 +2,9 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 import os
-from flask import Flask
+from flask import Flask, session
+from flask_session import Session
+
 from config import Config
 
 import app.src.models as model
@@ -10,7 +12,8 @@ import app.src.models as model
 
 
 db = model.db
-
+se = Session()
+Config.SESSION_SQLALCHEMY = db
 
 
 def create_app(config_class=Config):
@@ -22,6 +25,7 @@ def create_app(config_class=Config):
 
 
     db.init_app(app)
+    se.init_app(app)
     
 
 

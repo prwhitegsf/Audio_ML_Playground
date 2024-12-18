@@ -27,7 +27,7 @@ class AudioFeatures():
 
 
     def get_spectrogram(self):
-        spectro = T.Spectrogram(n_fft=1024)
+        spectro = T.Spectrogram(n_fft=2048,hop_length=128)
         return spectro(self.wav)
 
 
@@ -50,7 +50,7 @@ class AudioFeatures():
                                 melkwargs={
                                     "n_fft": 2048,
                                     "n_mels": n_mels,
-                                    "hop_length": 512,
+                                    "hop_length": 128,
                                     "mel_scale": "slaney",
                                     "center": True
                                     },
@@ -73,7 +73,7 @@ class AudioFeatures():
     def get_mel_spectrogram(self,n_mels):
         mel_spectrogram = T.MelSpectrogram(sample_rate=self.sr,
                                             n_fft=2048,
-                                            hop_length=512,
+                                            hop_length=128,
                                             center=True,
                                             normalized=True,
                                             pad_mode="reflect",
@@ -130,3 +130,9 @@ class AudioFeatures():
         buf.seek(0)
         
         return buf
+    
+
+class FeaturesFromNumpy():
+
+    def __init__(self):
+        pass

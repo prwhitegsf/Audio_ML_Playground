@@ -38,8 +38,6 @@ def data_inspector():
 
 
 
-@bp.route('/', methods=['GET', 'POST'])
-@bp.route('/index', methods=['GET', 'POST'])
 @bp.route('/feature-extractor', methods=['GET', 'POST'])
 def feature_extractor():
     
@@ -101,3 +99,51 @@ def view_audio_features():
     fig = ap.get_record_viz(n_mels=s.get_num_mels(), n_mfcc=s.get_num_mfcc())
     return send_file(fig, mimetype='image/png')
 
+
+
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
+@bp.route('/view-label-mfcc',methods=['GET','POST'])
+def get_label_mfccs():
+    form = forms.DataSetFilterForm()
+    next_button = forms.NextRecord()
+    s = SessionManager(sess)
+    s.initialize_session(ctl.get_full_file_list(db))
+    
+ 
+    if request.method == 'POST':
+        
+        if form.submit.data:
+            
+            s.set_filters(form)
+            s.set_file_list(ctl.get_filtered_file_list(sess,db))
+            form.submit.data = False
+            
+        if next_button.next.data:
+            
+            s.get_next_record()
+            s.set_form_data(form)
+           
+
+        af.change_file(sess['fp'])
+      
+
+
+    return render_template('label-selector.html',
+        title='Home', 
+        form=form, 
+        next_button=next_button, 
+        record_text=sess['record_message'])
+
+@bp.route('/view-mfcc-group',  methods=['GET', 'POST'])
+def view_mfcc_group():
+    
+    ap = PlotAggregator(af)
+    # Creating a new session obj b/c initialize session
+    # performs all the necessary checks 
+    # and I wanted to have getters for num_mels and num_mfcc
+    # still...a little bad code smell
+    s = SessionManager(sess)
+    s.initialize_session(ctl.get_full_file_list(db))
+    fig = ap.get_record_viz(n_mels=s.get_num_mels(), n_mfcc=s.get_num_mfcc())
+    return send_file(fig, mimetype='image/png')
