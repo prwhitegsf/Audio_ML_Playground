@@ -56,6 +56,7 @@ def feature_extractor():
             
             s.set_filters(form, sess)
             s.set_file_list(sess)
+            af.choose_npy_array(sess)
             form.submit.data = False
             
         if next_button.next.data:
@@ -64,7 +65,7 @@ def feature_extractor():
             s.set_form_data(form,sess)
            
 
-        af.change_file(sess['fp'])
+        af.change_file(sess)
       
 
 
@@ -95,7 +96,7 @@ def view_audio_features():
     ap = PlotAggregator(af)
 
     s.initialize_session(sess)
-    fig = ap.get_record_viz(n_mels=s.get_num_mels(sess), n_mfcc=s.get_num_mfcc(sess))
+    fig = ap.get_record_viz(sess,n_mels=s.get_num_mels(sess), n_mfcc=s.get_num_mfcc(sess))
     return send_file(fig, mimetype='image/png')
 
 
@@ -109,6 +110,7 @@ def get_label_mfccs():
     
    
     s.initialize_session(sess)
+    s.init_mfcc_img_groups(sess)
     
  
     if request.method == 'POST':
@@ -117,15 +119,16 @@ def get_label_mfccs():
             
             s.set_filters(form, sess)
             s.set_file_list(sess)
+            af.choose_npy_array(sess)
             form.submit.data = False
             
         if next_button.next.data:
             
-            s.get_next_record(sess)
+            s.get_next_record_group(sess)
             s.set_form_data(form,sess)
            
 
-        af.change_file(sess['fp'])
+        af.change_file(sess)
       
 
 
@@ -141,7 +144,7 @@ def view_mfcc_group():
     ap = PlotAggregator(af)
 
     s.initialize_session(sess)
-    fig = ap.get_record_viz(n_mels=s.get_num_mels(sess), n_mfcc=s.get_num_mfcc(sess))
+    fig = ap.get_mfcc_plots_for_label(sess)
     
     return send_file(fig, mimetype='image/png')
 

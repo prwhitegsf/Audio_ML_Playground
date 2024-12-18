@@ -33,10 +33,15 @@ class SessionManager():
             files, ids = self.dbc.get_full_file_list()
 
             sess['file_list'] = files
+            sess['ids'] = ids
             sess['record_count'] = len(sess['file_list'])
             sess['record_num']=0
             sess['fp'] = sess['file_list'][sess['record_num']]
+            sess['id'] = sess['ids'][sess['record_num']]
             sess['record_message'] = f'Displaying record {sess['record_num']+1} of {sess['record_count']}'
+
+    def init_mfcc_img_groups(self, sess):
+        self.get_record_group(sess)
 
         
 
@@ -63,9 +68,11 @@ class SessionManager():
     def set_file_list(self, sess):
         files, ids = self.dbc.get_filtered_file_list(sess)
         sess['file_list'] = files
+        sess['ids'] = ids
         sess['record_count'] = len(sess['file_list'])
         sess['record_num'] = 0
         sess['fp'] = sess['file_list'][0]
+        sess['id'] = sess['ids'][0]
         sess['record_message'] = f'Displaying record {sess['record_num']+1} of {sess['record_count']}'
 
 
@@ -74,10 +81,28 @@ class SessionManager():
 
         if sess['record_num'] < sess['record_count']:
             sess['fp'] = sess['file_list'][sess['record_num']]
+            sess['id'] = sess['ids'][sess['record_num']]
             sess['record_message'] = f'Displaying record {sess['record_num']+1} of {sess['record_count']}'
         else:
              sess['record_message'] = f'Displaying record {sess['record_count']} of {sess['record_count']}'
 
+    def get_record_group(self, sess):
+        
+        remaining_records = sess['record_count'] - sess['record_num']
+
+        if remaining_records >= 8:
+            sess['fp_group'] = sess['file_list'][sess['record_num']:sess['record_num'] + 8]
+            sess['id_group'] = sess['ids'][sess['record_num']:sess['record_num'] + 8]
+            sess['record_message'] = f'Records {sess['record_num']} through {sess['record_num']+8} of {sess['record_count']}'
+        else:
+            sess['fp_group'] = sess['file_list'][sess['record_num']:sess['record_num'] + remaining_records]
+            sess['id_group'] = sess['ids'][sess['record_num']:sess['record_num'] + remaining_records]
+
+
+    def get_next_record_group(self, sess):
+        
+        sess['record_num'] += 8
+        self.get_record_group(sess)
 
     def get_num_mels(self, sess):
         return int(sess['filters']['num_mels'])

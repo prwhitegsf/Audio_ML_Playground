@@ -16,15 +16,65 @@ import matplotlib.pyplot as plt
 
 class AudioFeatures():
 
-    def __init__(self, file="app/static/datasets/RAVDESS/audio/Actor_01/03-01-01-01-01-01-01.wav"):
+    def __init__(self, file="app/static/datasets/RAVDESS/audio/Actor_05/03-01-05-01-01-01-05.wav", id=0):
         
         self.wav, self.sr = torchaudio.load(file)
         self.fig = Figure()
+        self.id = id
+        self.n_mels = 128
+        self.n_mfcc = 40
+        self.filtered_df = self.load_initial_data()
+        #print (self.filtered_df.head())
+
+    def load_initial_data(self):
+        np_path = f'app/static/datasets/RAVDESS/features/mfcc/ravdess_{self.n_mels}_{self.n_mfcc}.npy'
+        ds = np.load(np_path, allow_pickle=True)
+        return pd.DataFrame(ds,columns=['features','feature_viz','id'])
+
+    def choose_npy_array(self, sess):
+
+        self.n_mels= sess['filters']['num_mels']
+        self.n_mfcc = sess['filters']['num_mfcc']
+
+        np_path = f'app/static/datasets/RAVDESS/features/mfcc/ravdess_{self.n_mels}_{self.n_mfcc}.npy'
+        ds = np.load(np_path, allow_pickle=True)
+        df = pd.DataFrame(ds,columns=['features','feature_viz','id'])
+        print (sess['ids'])
+        df['label'] = df['id'].isin(sess['ids'])
+        self.filtered_df = df[df['label']].copy()
+        self.filtered_df.reset_index(inplace=True)
 
 
-    def change_file(self, file):
-        self.wav, self.sr = torchaudio.load(file)
+    def get_mfcc_from_npy(self, sess):
+        #print (self.filtered_df.head())
+        df = self.filtered_df.loc[self.filtered_df['id'] == sess['id']]
+        return torch.from_numpy(df['feature_viz'].iloc[0])
+    '''  
+    def get_mfcc_group_from_npy(self, sess):
+        #print (self.filtered_df.head())
+        mfccs =[]
+        curr_record_num = sess['record_num']
+        if curr_record_num + 8 < sess['record_count']:
+            for i in range(curr_record_num,8):
+                df = self.filtered_df.iloc[i]
+                mfccs.append(torch.from_numpy(df['feature_viz']))
+        
+        return mfccs
+    '''
+    def get_mfcc_group_from_npy(self, sess):
+        #print (self.filtered_df.head())
+        mfccs =[]
 
+        for id in sess['id_group']:
+            df = self.filtered_df.loc[self.filtered_df['id'] == id]
+            mfccs.append(torch.from_numpy(df['feature_viz'].iloc[0]))
+        
+        return mfccs
+
+
+    def change_file(self, sess):
+        self.wav, self.sr = torchaudio.load(sess['fp'])
+        self.id = sess['id']
 
     def get_spectrogram(self):
         spectro = T.Spectrogram(n_fft=2048,hop_length=128)

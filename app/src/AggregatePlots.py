@@ -8,8 +8,8 @@ class PlotAggregator():
 
         self.fig = Figure(figsize=(5, 10),layout='constrained')
 
-    def get_record_viz(self,n_mels=128, n_mfcc=40):
-
+    def get_record_viz(self,sess,n_mels=128, n_mfcc=40):
+        
         axs = self.fig.subplot_mosaic(
             """
             AAAA
@@ -50,8 +50,10 @@ class PlotAggregator():
         mel_cb.ax.tick_params(axis='y',labelsize=7)
 
         
-        mfcc = self.af.get_mfcc(n_mels=n_mels, n_mfcc=n_mfcc)
-        mfccplot = self.af.plot_mfcc(mfcc[0],title='MFCC',ax=axs["D"])
+        #mfcc = self.af.get_mfcc(n_mels=n_mels, n_mfcc=n_mfcc)
+        mfcc = self.af.get_mfcc_from_npy(sess)
+        #mfccplot = self.af.plot_mfcc(mfcc[0],title='MFCC',ax=axs["D"])
+        mfccplot = self.af.plot_mfcc(mfcc,title='MFCC',ax=axs["D"])
         axs["D"].tick_params(axis='y',labelsize=7)
         axs["D"].tick_params(axis='x',labelsize=7)
         
@@ -62,7 +64,30 @@ class PlotAggregator():
         mfcc_cb.ax.tick_params(axis='y',labelsize=7)
 
 
-
-        #self.fig.tight_layout()
-
         return self.af.fig_to_buf(self.fig)
+    
+
+    def get_mfcc_plots_for_label(self, sess):
+        
+        fig = Figure(figsize=(9, 10),layout='constrained')
+        
+        mfccs = self.af.get_mfcc_group_from_npy(sess)
+
+        plt_count = len(mfccs)
+
+        axs = fig.subplots(4,2)
+
+        col = 2
+        row = 4
+        i = 0
+        j = 0
+        k = 0
+        for i in range(col):
+            for j in range(row):
+                self.af.plot_mfcc(mfccs[k],title=f'mfcc: {k+1}',ylabel=None,ax=axs[j,i])
+                axs[j,i].set_xticks(ticks=[])
+                axs[j,i].set_yticks(ticks=[])
+                k+=1
+        
+
+        return self.af.fig_to_buf(fig)
