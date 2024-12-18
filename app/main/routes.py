@@ -2,11 +2,11 @@
 
 from flask import render_template, request
 from flask import session as sess
-from flask import send_file, make_response, jsonify
+from flask import send_file, make_response, jsonify,current_app
 
 from app.main import bp
 import app.main.forms as forms
-import app.src.selector as sel
+from app.src.DatabaseController import DBControl 
 
 #from app.src.models import ravdess_metadata as md
 from app.src.FeatureExtractors import AudioFeatures 
@@ -15,8 +15,10 @@ from app.src.SessionManager import SessionManager
 from app import db
 
 # Audio Features class instantiation
-ctl = sel.DBControl()
+dbc = DBControl(db)
+s = SessionManager(dbc)
 af = AudioFeatures()
+
 
 
 
@@ -43,22 +45,23 @@ def feature_extractor():
     
     form = forms.DataSetFilterForm()
     next_button = forms.NextRecord()
-    s = SessionManager(sess)
-    s.initialize_session(ctl.get_full_file_list(db))
+    
+   
+    s.initialize_session(sess)
     
  
     if request.method == 'POST':
         
         if form.submit.data:
             
-            s.set_filters(form)
-            s.set_file_list(ctl.get_filtered_file_list(sess,db))
+            s.set_filters(form, sess)
+            s.set_file_list(sess)
             form.submit.data = False
             
         if next_button.next.data:
             
-            s.get_next_record()
-            s.set_form_data(form)
+            s.get_next_record(sess)
+            s.set_form_data(form,sess)
            
 
         af.change_file(sess['fp'])
@@ -90,13 +93,9 @@ def get_audio_blob():
 def view_audio_features():
     
     ap = PlotAggregator(af)
-    # Creating a new session obj b/c initialize session
-    # performs all the necessary checks 
-    # and I wanted to have getters for num_mels and num_mfcc
-    # still...a little bad code smell
-    s = SessionManager(sess)
-    s.initialize_session(ctl.get_full_file_list(db))
-    fig = ap.get_record_viz(n_mels=s.get_num_mels(), n_mfcc=s.get_num_mfcc())
+
+    s.initialize_session(sess)
+    fig = ap.get_record_viz(n_mels=s.get_num_mels(sess), n_mfcc=s.get_num_mfcc(sess))
     return send_file(fig, mimetype='image/png')
 
 
@@ -107,22 +106,23 @@ def view_audio_features():
 def get_label_mfccs():
     form = forms.DataSetFilterForm()
     next_button = forms.NextRecord()
-    s = SessionManager(sess)
-    s.initialize_session(ctl.get_full_file_list(db))
+    
+   
+    s.initialize_session(sess)
     
  
     if request.method == 'POST':
         
         if form.submit.data:
             
-            s.set_filters(form)
-            s.set_file_list(ctl.get_filtered_file_list(sess,db))
+            s.set_filters(form, sess)
+            s.set_file_list(sess)
             form.submit.data = False
             
         if next_button.next.data:
             
-            s.get_next_record()
-            s.set_form_data(form)
+            s.get_next_record(sess)
+            s.set_form_data(form,sess)
            
 
         af.change_file(sess['fp'])
@@ -139,11 +139,9 @@ def get_label_mfccs():
 def view_mfcc_group():
     
     ap = PlotAggregator(af)
-    # Creating a new session obj b/c initialize session
-    # performs all the necessary checks 
-    # and I wanted to have getters for num_mels and num_mfcc
-    # still...a little bad code smell
-    s = SessionManager(sess)
-    s.initialize_session(ctl.get_full_file_list(db))
-    fig = ap.get_record_viz(n_mels=s.get_num_mels(), n_mfcc=s.get_num_mfcc())
+
+    s.initialize_session(sess)
+    fig = ap.get_record_viz(n_mels=s.get_num_mels(sess), n_mfcc=s.get_num_mfcc(sess))
+    
     return send_file(fig, mimetype='image/png')
+

@@ -9,8 +9,8 @@ from app.src.models import ravdess_metadata as md
 
 class DBControl():
 
-    def __init__(self):
-        pass
+    def __init__(self, db):
+        self.db = db
         
     def create_where_clause(self,sess):
     
@@ -41,19 +41,32 @@ class DBControl():
 
 
 
-    def get_full_file_list(self,db):
+    def get_full_file_list(self):
             
-        stmt = db.session.execute(db.select(md)).scalars()
-        files = [row.filepath for row in stmt]
+        stmt = self.db.session.execute(self.db.select(md)).scalars()
+        files=[]
+        ids=[]
+        for row in stmt:
+            files.append(row.filepath)
+            ids.append(row.id)
 
-        return files
+        #files = [(row.filepath, row.id) for row in stmt]
+
+        return files, ids
 
 
-    def get_filtered_file_list(self,sess,db):
+    def get_filtered_file_list(self,sess):
 
-        stmt = db.session.execute(db.select(md).where(text(self.create_where_clause(sess)))).scalars()  
-        files = [row.filepath for row in stmt]
-        return files
+        stmt = self.db.session.execute(self.db.select(md).where(text(self.create_where_clause(sess)))).scalars()  
+        files=[]
+        ids=[]
+        for row in stmt:
+            files.append(row.filepath)
+            ids.append(row.id)
+
+        #files = [(row.filepath, row.id) for row in stmt]
+
+        return files, ids
 
 
 

@@ -24,6 +24,7 @@ def create_app(config_class=Config):
     app.register_blueprint(main_bp)
 
 
+
     db.init_app(app)
     se.init_app(app)
     
@@ -35,7 +36,7 @@ def create_app(config_class=Config):
         if not os.path.exists('logs'):
             os.mkdir('logs')
         file_handler = RotatingFileHandler('logs/test.log',
-                                           maxBytes=10240, backupCount=10)
+                                        maxBytes=10240, backupCount=10)
         file_handler.setFormatter(logging.Formatter(
             '%(asctime)s %(levelname)s: %(message)s '
             '[in %(pathname)s:%(lineno)d]'))
