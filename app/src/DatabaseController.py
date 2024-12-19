@@ -39,34 +39,18 @@ class DBControl():
 
         return stmt
 
+    def _create_record_list(self,stmt):
+        records = [(row.filepath, row.id) for row in stmt]
+        return records
 
-
-    def get_full_file_list(self):
-            
+    def get_all_records(self):
         stmt = self.db.session.execute(self.db.select(md)).scalars()
-        files=[]
-        ids=[]
-        for row in stmt:
-            files.append(row.filepath)
-            ids.append(row.id)
-
-        #files = [(row.filepath, row.id) for row in stmt]
-
-        return files, ids
+        return self._create_record_list(stmt)
 
 
-    def get_filtered_file_list(self,sess):
-
+    def get_filtered_records(self,sess):
         stmt = self.db.session.execute(self.db.select(md).where(text(self.create_where_clause(sess)))).scalars()  
-        files=[]
-        ids=[]
-        for row in stmt:
-            files.append(row.filepath)
-            ids.append(row.id)
-
-        #files = [(row.filepath, row.id) for row in stmt]
-
-        return files, ids
+        return self._create_record_list(stmt)
 
 
 

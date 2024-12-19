@@ -39,45 +39,47 @@ class AudioFeatures():
         np_path = f'app/static/datasets/RAVDESS/features/mfcc/ravdess_{self.n_mels}_{self.n_mfcc}.npy'
         ds = np.load(np_path, allow_pickle=True)
         df = pd.DataFrame(ds,columns=['features','feature_viz','id'])
-        print (sess['ids'])
+        
+        # feels like this should be a separate function
         df['label'] = df['id'].isin(sess['ids'])
         self.filtered_df = df[df['label']].copy()
         self.filtered_df.reset_index(inplace=True)
 
 
     def get_mfcc_from_npy(self, sess):
-        #print (self.filtered_df.head())
-        df = self.filtered_df.loc[self.filtered_df['id'] == sess['id']]
+      
+        id = sess['curr_record']['rec_id']
+        df = self.filtered_df.loc[self.filtered_df['id'] == id]
         return torch.from_numpy(df['feature_viz'].iloc[0])
-    '''  
-    def get_mfcc_group_from_npy(self, sess):
-        #print (self.filtered_df.head())
-        mfccs =[]
-        curr_record_num = sess['record_num']
-        if curr_record_num + 8 < sess['record_count']:
-            for i in range(curr_record_num,8):
-                df = self.filtered_df.iloc[i]
-                mfccs.append(torch.from_numpy(df['feature_viz']))
-        
-        return mfccs
-    '''
-    def get_mfcc_group_from_npy(self, sess):
-        #print (self.filtered_df.head())
-        mfccs =[]
 
-        for id in sess['id_group']:
+
+
+    def get_mfcc_group_from_npy(self, sess):
+        
+        mfccs =[]
+        ids = []
+        for i in sess['record_group_indices']:
+            id = sess['records'][i][1]
+            ids.append(id)
+            #print("id loop: ",id)
             df = self.filtered_df.loc[self.filtered_df['id'] == id]
             mfccs.append(torch.from_numpy(df['feature_viz'].iloc[0]))
         
-        return mfccs
+        return mfccs, ids
+
+    def change_group_audio_file(self, sess):
+        record_index = sess['record_group_indices'][sess['curr_record']['group_index']]
+        fp = sess['records'][record_index][0]
+        self.wav, self.sr = torchaudio.load(fp)
 
 
-    def change_file(self, sess):
-        self.wav, self.sr = torchaudio.load(sess['fp'])
-        self.id = sess['id']
-
+    def change_audio_file(self, sess):
+        
+        new_record = sess['records'][sess['curr_record']['record_index']]
+        self.wav, self.sr = torchaudio.load(new_record[0])
+        
     def get_spectrogram(self):
-        spectro = T.Spectrogram(n_fft=2048,hop_length=128)
+        spectro = T.Spectrogram(n_fft=2048,hop_length=128,)
         return spectro(self.wav)
 
 
@@ -143,7 +145,7 @@ class AudioFeatures():
         if title is not None:
             ax.set_title(title)
             ax.title.set_size(10)
-        
+      
         ax.set_ylabel(ylabel)
         return ax.imshow(librosa.power_to_db(spectro), origin="lower", aspect="auto", interpolation="nearest",cmap=colormaps['seismic'],norm=Normalize(vmin=-80,vmax=0))
 
@@ -181,8 +183,3 @@ class AudioFeatures():
         
         return buf
     
-
-class FeaturesFromNumpy():
-
-    def __init__(self):
-        pass

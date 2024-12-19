@@ -29,8 +29,8 @@ class PlotAggregator():
         specplot = self.af.plot_spectrogram(spectro[0], title='Spectrogram',ax=axs["B"])
         axs["B"].tick_params(axis='y',labelsize=7)
         axs["B"].tick_params(axis='x',labelsize=7)
-        axs["B"].set_yticks(ticks=[0,105,210,315,420],
-                            labels=[0,5000,10000,15000,20000])
+        axs["B"].set_yticks(ticks=[0,200,400,600,800,1000],
+                           labels=[0,1600,3200,4800,6400,8000])
         axs["B"].set_xticks(ticks=[0,50,100,150,200,250,300], 
                             labels=[0,0.5,1.0,1.5,2.0,2.5,3.0])
         
@@ -71,7 +71,7 @@ class PlotAggregator():
         
         fig = Figure(figsize=(9, 10),layout='constrained')
         
-        mfccs = self.af.get_mfcc_group_from_npy(sess)
+        mfccs, ids = self.af.get_mfcc_group_from_npy(sess)
 
         plt_count = len(mfccs)
 
@@ -84,7 +84,7 @@ class PlotAggregator():
         k = 0
         for i in range(col):
             for j in range(row):
-                self.af.plot_mfcc(mfccs[k],title=f'mfcc: {k+1}',ylabel=None,ax=axs[j,i])
+                self.af.plot_mfcc(mfccs[k],title=f'mfcc: {ids[k]}',ylabel=None,ax=axs[j,i])
                 axs[j,i].set_xticks(ticks=[])
                 axs[j,i].set_yticks(ticks=[])
                 k+=1

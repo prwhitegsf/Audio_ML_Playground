@@ -2,11 +2,11 @@
 {% block content %}
 
 <h1>Audio Feature Extraction</h1>
-
+<a href="{{ url_for('main.get_label_mfccs') }}">go to label selector</a>
 
     <div class="fe-content">
     <div class="text-box">
-        Example text.
+       
     </div>
 
     <div class="feature-explorer">
@@ -39,9 +39,9 @@
                             emotion<br>
                             {{ form.emotion }}
                         </p>
-                        <p id="mels">
+                        <p id="num_mels">
                             mel count<br>
-                            {% for subfield in form.mel_filter_count %}
+                            {% for subfield in form.num_mels %}
                                         
                                 {{subfield}}
                                 {{subfield.label}}<br>
@@ -49,9 +49,9 @@
                             {% endfor %}
                         </p>
 
-                        <p id="mfcc">
+                        <p id="num_mfcc">
                             mfcc count<br>
-                            {% for subfield in form.mfcc_count %}
+                            {% for subfield in form.num_mfcc %}
                                         
                                 {{subfield}}
                                 {{subfield.label}}<br>

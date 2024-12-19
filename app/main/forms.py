@@ -40,17 +40,17 @@ class DataSetFilterForm(FlaskForm):
                                                         ('fearful','fearful'),
                                                         ('disgust','disgust'),
                                                         ('surprised','surprised')],
-                                                        default='all')
+                                                        default=('all','all'))
 
     intensity = SelectField('Intensity',choices=['all','1','2'],default='all')
 
-    mel_filter_count = RadioField("Mel Filter Count", choices=[('512','512'),
+    num_mels = RadioField("Mel Filter Count", choices=[('512','512'),
                                                                ('256','256'),
                                                                ('128','128'),
                                                                ('64','64')],
                                                                default='128')
     
-    mfcc_count = RadioField("MFCC Count", choices=[
+    num_mfcc = RadioField("MFCC Count", choices=[
                                                    ('60','60'),
                                                    ('40','40'),
                                                    ('20','20'),
@@ -61,3 +61,6 @@ class DataSetFilterForm(FlaskForm):
 
 class NextRecord(FlaskForm):
      next = SubmitField('Next')
+
+class NextAudioRecord(FlaskForm):
+     next_audio_file = SubmitField('Next Audio File')

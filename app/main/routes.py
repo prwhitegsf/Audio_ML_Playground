@@ -39,7 +39,8 @@ def data_inspector():
 
 
 
-
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
 @bp.route('/feature-extractor', methods=['GET', 'POST'])
 def feature_extractor():
     
@@ -47,15 +48,15 @@ def feature_extractor():
     next_button = forms.NextRecord()
     
    
-    s.initialize_session(sess)
-    
+    s.init_sess(sess,form)
+    sess['record_message'] = 'default'   
  
     if request.method == 'POST':
         
         if form.submit.data:
             
             s.set_filters(form, sess)
-            s.set_file_list(sess)
+            s.set_record_list(sess)
             af.choose_npy_array(sess)
             form.submit.data = False
             
@@ -65,7 +66,7 @@ def feature_extractor():
             s.set_form_data(form,sess)
            
 
-        af.change_file(sess)
+        af.change_audio_file(sess)
       
 
 
@@ -73,7 +74,7 @@ def feature_extractor():
         title='Home', 
         form=form, 
         next_button=next_button, 
-        record_text=sess['record_message'])
+        record_text=sess['single_message'])
 
 
 
@@ -95,55 +96,59 @@ def view_audio_features():
     
     ap = PlotAggregator(af)
 
-    s.initialize_session(sess)
     fig = ap.get_record_viz(sess,n_mels=s.get_num_mels(sess), n_mfcc=s.get_num_mfcc(sess))
     return send_file(fig, mimetype='image/png')
 
 
 
-@bp.route('/', methods=['GET', 'POST'])
-@bp.route('/index', methods=['GET', 'POST'])
-@bp.route('/view-label-mfcc',methods=['GET','POST'])
+#@bp.route('/', methods=['GET', 'POST'])
+#@bp.route('/index', methods=['GET', 'POST'])
+@bp.route('/label-selector',methods=['GET','POST'])
 def get_label_mfccs():
+
     form = forms.DataSetFilterForm()
-    next_button = forms.NextRecord()
-    
+    next_group = forms.NextRecord()
+    next_audio_file = forms.NextAudioRecord()
+
    
-    s.initialize_session(sess)
-    s.init_mfcc_img_groups(sess)
+    s.init_sess(sess,form)
+
     
  
     if request.method == 'POST':
         
         if form.submit.data:
-            
             s.set_filters(form, sess)
-            s.set_file_list(sess)
+            s.set_record_list(sess)
             af.choose_npy_array(sess)
+        
             form.submit.data = False
             
-        if next_button.next.data:
-            
-            s.get_next_record_group(sess)
+        if next_group.next.data:
+            s.advance_record_group(sess)
             s.set_form_data(form,sess)
-           
+        
+        if next_audio_file.next_audio_file.data:
+            s.advance_record_within_group(sess)
+            s.set_form_data(form,sess)
+         
 
-        af.change_file(sess)
+        af.change_group_audio_file(sess)
       
 
 
     return render_template('label-selector.html',
         title='Home', 
         form=form, 
-        next_button=next_button, 
-        record_text=sess['record_message'])
+        next_group=next_group, 
+        next_audio_file=next_audio_file,
+        visual_message=sess['visual_message'],
+        audio_message = sess['audio_message'])
 
 @bp.route('/view-mfcc-group',  methods=['GET', 'POST'])
 def view_mfcc_group():
     
     ap = PlotAggregator(af)
-
-    s.initialize_session(sess)
     fig = ap.get_mfcc_plots_for_label(sess)
     
     return send_file(fig, mimetype='image/png')
