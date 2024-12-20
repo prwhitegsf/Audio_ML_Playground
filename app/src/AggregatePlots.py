@@ -19,7 +19,7 @@ class PlotAggregator():
             """
         )
 
-        wav = self.af.get_waveform(ax=axs["A"])
+        wav = self.af.plot_waveform(ax=axs["A"])
         axs["A"].tick_params(axis='y',labelsize=7)
         axs["A"].tick_params(axis='x',labelsize=7)
 
@@ -50,10 +50,10 @@ class PlotAggregator():
         mel_cb.ax.tick_params(axis='y',labelsize=7)
 
         
-        #mfcc = self.af.get_mfcc(n_mels=n_mels, n_mfcc=n_mfcc)
-        mfcc = self.af.get_mfcc_from_npy(sess)
-        #mfccplot = self.af.plot_mfcc(mfcc[0],title='MFCC',ax=axs["D"])
-        mfccplot = self.af.plot_mfcc(mfcc,title='MFCC',ax=axs["D"])
+        mfcc = self.af.get_mfcc(n_mels=n_mels, n_mfcc=n_mfcc)
+        #mfcc = self.af.get_mfcc_from_npy(sess)
+        mfccplot = self.af.plot_mfcc(mfcc[0],title='MFCC',ax=axs["D"])
+        #mfccplot = self.af.plot_mfcc(mfcc,title='MFCC',ax=axs["D"])
         axs["D"].tick_params(axis='y',labelsize=7)
         axs["D"].tick_params(axis='x',labelsize=7)
         

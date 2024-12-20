@@ -12,13 +12,14 @@ from app.src.DatabaseController import DBControl
 from app.src.FeatureExtractors import AudioFeatures 
 from app.src.AggregatePlots import PlotAggregator
 from app.src.SessionManager import SessionManager
+from app.src.ResultsEvaluator import EvaluateResults 
 from app import db
 
 # Audio Features class instantiation
 dbc = DBControl(db)
 s = SessionManager(dbc)
 af = AudioFeatures()
-
+er = EvaluateResults(af)
 
 
 
@@ -39,25 +40,22 @@ def data_inspector():
 
 
 
-@bp.route('/', methods=['GET', 'POST'])
-@bp.route('/index', methods=['GET', 'POST'])
+#@bp.route('/', methods=['GET', 'POST'])
+#@bp.route('/index', methods=['GET', 'POST'])
 @bp.route('/feature-extractor', methods=['GET', 'POST'])
 def feature_extractor():
     
     form = forms.DataSetFilterForm()
-    next_button = forms.NextRecord()
-    
+    next_button = forms.NextRecord()   
+    if request.method == 'GET':
+        s.init_sess(sess,form)
    
-    s.init_sess(sess,form)
-    sess['record_message'] = 'default'   
- 
     if request.method == 'POST':
         
         if form.submit.data:
             
             s.set_filters(form, sess)
             s.set_record_list(sess)
-            af.choose_npy_array(sess)
             form.submit.data = False
             
         if next_button.next.data:
@@ -67,9 +65,7 @@ def feature_extractor():
            
 
         af.change_audio_file(sess)
-      
-
-
+ 
     return render_template('feature-extractor.html',
         title='Home', 
         form=form, 
@@ -77,6 +73,85 @@ def feature_extractor():
         record_text=sess['single_message'])
 
 
+
+
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
+@bp.route('/label-selector',methods=['GET','POST'])
+def get_label_mfccs():
+
+    if request.method == 'GET':
+        sess.clear()
+
+    form = forms.DataSetFilterForm()
+    next_group = forms.NextRecord()
+    next_audio_file = forms.NextAudioRecord()
+    
+
+    
+    s.init_sess(sess,form)
+
+    if request.method == 'POST':
+        
+        if form.submit.data:
+            s.set_filters(form, sess)
+            s.set_record_list(sess)
+            af.choose_npy_array(sess)
+        
+            form.submit.data = False
+            
+        if next_group.next.data:
+            s.advance_record_group(sess)
+            s.set_form_data(form,sess)
+        
+        if next_audio_file.next_audio_file.data:
+            s.advance_record_within_group(sess)
+            s.set_form_data(form,sess)
+         
+        af.change_group_audio_file(sess)
+
+    return render_template('label-selector.html',
+        title='Home', 
+        form=form, 
+        next_group=next_group, 
+        next_audio_file=next_audio_file,
+        visual_message=sess['visual_message'],
+        audio_message = sess['audio_message'])
+
+@bp.route('/training-results',methods=['GET','POST'])
+def show_training_results():
+    
+    svc_results = []
+
+    if request.method == 'GET':
+        er.get_features_and_labels()
+        er.scale_features()
+        er.encode_labels()
+        er.split_dataset()
+    
+    svc_results = er.get_SVC_scores()
+    linsvc_results = er.get_LinearSVC_scores()
+    #svc_results = [[1,1,1],[2,2,2],[3,3,3],[4,4,4]]
+    
+    
+    return render_template('training-results.html',
+        title='Home',
+        svc_results = svc_results,
+        linsvc_results = linsvc_results)
+    # features, labels = af.get_filtered_df()
+    # create distro table (will be delivered in a separate function call)
+    # scale, label encoder and split
+    # define models and apply training function
+    # return 2D array to html and loop to make table
+    
+@bp.route('/training-results',methods=['POST'])
+def show_testing_results():
+    pass
+
+@bp.route('/label-distribution')
+def view_label_distribution():
+    fig = er.show_label_distribution()
+    return send_file(fig, mimetype='image/png')
 
 
 @bp.route('/audio-player', methods=['GET', 'POST'])
@@ -101,49 +176,7 @@ def view_audio_features():
 
 
 
-#@bp.route('/', methods=['GET', 'POST'])
-#@bp.route('/index', methods=['GET', 'POST'])
-@bp.route('/label-selector',methods=['GET','POST'])
-def get_label_mfccs():
 
-    form = forms.DataSetFilterForm()
-    next_group = forms.NextRecord()
-    next_audio_file = forms.NextAudioRecord()
-
-   
-    s.init_sess(sess,form)
-
-    
- 
-    if request.method == 'POST':
-        
-        if form.submit.data:
-            s.set_filters(form, sess)
-            s.set_record_list(sess)
-            af.choose_npy_array(sess)
-        
-            form.submit.data = False
-            
-        if next_group.next.data:
-            s.advance_record_group(sess)
-            s.set_form_data(form,sess)
-        
-        if next_audio_file.next_audio_file.data:
-            s.advance_record_within_group(sess)
-            s.set_form_data(form,sess)
-         
-
-        af.change_group_audio_file(sess)
-      
-
-
-    return render_template('label-selector.html',
-        title='Home', 
-        form=form, 
-        next_group=next_group, 
-        next_audio_file=next_audio_file,
-        visual_message=sess['visual_message'],
-        audio_message = sess['audio_message'])
 
 @bp.route('/view-mfcc-group',  methods=['GET', 'POST'])
 def view_mfcc_group():

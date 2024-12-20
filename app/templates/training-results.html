@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Training Results</h1>
+<a href="{{ url_for('main.get_label_mfccs') }}">go to label selector</a>
+
+    <div class="fe-content">
+    <div class="text-box">
+       
+    </div>
+
+    <div class="feature-explorer">
+        <div class="fe-control">
+            <div class="fe-form-filters">
+                <img id="plot" src="{{ url_for('main.view_label_distribution') }}" alt="Matplotlib Plot">
+            </div>
+            
+            <div class="fe-record-nav">
+                
+               
+                
+                
+            </div>
+            <div class="text-box">
+                Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. Example text. 
+            </div>
+        </div>
+        
+        <div class="view-audio-features">
+            <p id="'svc-results">
+                SVC Results<br>
+                <table>
+                    <tr>
+                        <th>Recall</th>
+                        <th>Precision</th>
+                        <th>Accuracy</th>
+                    </tr>
+                {% for row in svc_results %}
+                      
+                
+                  <tr>
+                    {% for val in row %}
+                    <td>{{val}}</td>
+                    {% endfor %}
+                </tr> 
+                                        
+                {% endfor %}
+            </table>
+
+            LinearSVC Results<br>
+                <table>
+                    <tr>
+                        <th>Recall</th>
+                        <th>Precision</th>
+                        <th>Accuracy</th>
+                    </tr>
+                {% for row in linsvc_results %}
+                      
+                
+                  <tr>
+                    {% for val in row %}
+                    <td>{{val}}</td>
+                    {% endfor %}
+                </tr> 
+                                        
+                {% endfor %}
+            </table>
+            </p>
+          
+          
+        </div>   
+    </div>
+   
+</div>
+
+{% endblock %}
